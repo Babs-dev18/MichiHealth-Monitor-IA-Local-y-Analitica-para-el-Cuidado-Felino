@@ -35,7 +35,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           REMOTE_PORT: ${{ secrets.SERVER_PORT }}
           TARGET: "/home/babs-dev18/infraestructura/domotica/"
-          EXCLUDE: "/mosquitto_data/, /config_ha/, /frigate_data/, *.db, *.db-wal, *.db-shm" # 👈 ¡NUEVA LÍNEA! Ignora datos pesados y bloqueados
+          EXCLUDE: "**/mosquitto_data/, **/config_ha/, **/image/, **/.cache/, **/*.db, **/*.db-*" # Ignora datos pesados y bloqueados
 
       # 3️⃣ Se conecta al servidor y le dice a Docker que refresque los contenedores con el nuevo código
       - name: 🔄 Reiniciar servicios en Docker
