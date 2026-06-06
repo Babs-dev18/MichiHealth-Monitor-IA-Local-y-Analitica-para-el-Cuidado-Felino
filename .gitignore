@@ -11,3 +11,8 @@ Thumbs.db
 docker/frigate/db/
 docker/compreface/data/
 docker/home-assistant/config/
+
+# Datos de HA y videos
+docker/mosquitto_data/
+docker/config_ha/
+*.db
