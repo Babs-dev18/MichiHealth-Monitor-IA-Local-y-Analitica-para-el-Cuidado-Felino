@@ -1,0 +1,89 @@
+# 1️⃣ Automatización: Registrar la visita en base a lo que ve la IA
+- alias: "Michi Health: Registrar Visita Arenero"
+  id: michi_health_registrar_visita
+  trigger:
+    - platform: mqtt
+      topic: double-take/matches/loocam-analoga
+  condition:
+    - condition: template
+      value_template: "{{ trigger.payload_json.box.zone == 'zona_arenero' }}"
+  action:
+    - choose:
+        # 🐈 Caso Dobby (Siamés Gris)
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.payload_json.match.name == 'Dobby' and trigger.payload_json.match.score | float > 0.80 }}"
+          sequence:
+            - service: counter.increment
+              target:
+                entity_id: counter.michi_dobby_bano_counter
+
+        # 🐈 Caso Patrón (Siamés Blanco/Negro)
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.payload_json.match.name == 'Patron' and trigger.payload_json.match.score | float > 0.80 }}"
+          sequence:
+            - service: counter.increment
+              target:
+                entity_id: counter.michi_patron_bano_counter
+
+# 2️⃣ Automatización: Reinicio diario a medianoche
+- alias: "Michi Health: Reinicio Diario"
+  id: michi_health_reinicio_diario
+  trigger:
+    - platform: time
+      at: "00:00:00"
+  action:
+    - service: counter.reset
+      target:
+        entity_id:
+          - counter.michi_dobby_bano_counter
+          - counter.michi_patron_bano_counter
+
+# 3️⃣ Automatización: Alertas Dinámicas de Salud (Rangos por encima y por debajo)
+- alias: "Michi Health: Alertas de Salud por Rangos"
+  id: michi_health_alertas_rangos
+  trigger:
+    # Opción A: Va demasiado (Alerta inmediata si pasa de 6 visitas)
+    - platform: numeric_state
+      entity_id:
+        - counter.michi_dobby_bano_counter
+        - counter.michi_patron_bano_counter
+      above: 6
+    # Opción B: Control nocturno por si no han ido en todo el día (Revisión a las 21:00)
+    - platform: time
+      at: "21:00:00"
+  action:
+    - choose:
+        # 🔥 CASO 1: Alguien ha superado el límite máximo (Visitas excesivas)
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.platform == 'numeric_state' }}"
+          sequence:
+            - service: notify.persistent_notification
+              data:
+                title: "⚠️ Alerta Médica: Frecuencia Excesiva"
+                # Usamos Jinja2 para extraer el nombre limpio del gato según el contador que saltó
+                message: >
+                  El gato asociado al {{ trigger.to_state.name }} ha ido al baño más de 6 veces hoy (Total actual: {{ trigger.to_state.state }}). 
+                  Podría sufrir cistitis o infección urinaria. Vigila su comportamiento.
+
+        # ❄️ CASO 2: Control de la noche (Alguien no ha ido en todo el día)
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.platform == 'time' }}"
+          sequence:
+            # Evaluamos de forma dinámica si alguno está a 0 a las 21:00
+            - repeat:
+                for_each:
+                  - entity: counter.michi_dobby_bano_counter
+                    name: "Dobby"
+                  - entity: counter.michi_patron_bano_counter
+                    name: "Patrón"
+                sequence:
+                  - condition: template
+                    value_template: "{{ states(repeat.item.entity) | int == 0 }}"
+                  - service: notify.persistent_notification
+                    data:
+                      title: "⚠️ Alerta Médica: Inactividad"
+                      message: "{{ repeat.item.name }} no ha registrado visitas al arenero en todo el día. Riesgo de obstrucción."

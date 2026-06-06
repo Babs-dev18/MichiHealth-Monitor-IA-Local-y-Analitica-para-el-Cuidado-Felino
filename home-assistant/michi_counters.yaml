@@ -1,0 +1,12 @@
+# 🐈 Contadores de visitas al arenero
+michi_dobby_bano_counter:
+  name: "Visitas Arenero - Dobby"
+  icon: mdi:cat
+  minimum: 0
+  step: 1
+
+michi_patron_bano_counter:
+  name: "Visitas Arenero - Patrón"
+  icon: mdi:cat
+  minimum: 0
+  step: 1
