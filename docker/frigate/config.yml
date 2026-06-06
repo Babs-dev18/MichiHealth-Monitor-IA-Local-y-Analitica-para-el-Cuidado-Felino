@@ -1,0 +1,45 @@
+mqtt:
+  enabled: false # De momento lo dejamos apagado para que no falle al arrancar si no tienes un broker MQTT
+
+# 🧠 Aceleración por Hardware usando Intel OpenVINO
+detectors:
+  ov:
+    type: openvino
+    device: AUTO # Selecciona automáticamente la gráfica integrada de tu procesador Intel
+
+# 🎯 Definición de los objetos que la IA debe rastrear globalmente
+objects:
+  track:
+    - cat # Le decimos a la IA que solo busque gatos
+
+# 📹 Configuración de las cámaras
+cameras:
+  loocam_analoga: # El nombre que le damos a tu cámara analógica
+    ffmpeg:
+      inputs:
+        - path: rtsp://192.168.1.128:8554/loocam_analoga
+          roles:
+            - detect # Este flujo se usa para que la IA analice el movimiento
+            - record # Este flujo se usa para guardar los clips de vídeo
+
+    # 📉 Ajuste de resolución y FPS para optimizar tu CPU
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
+
+    # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
+    record:
+      enabled: true
+      retain:
+        days: 3 # Guarda las grabaciones normales durante 3 días
+        mode: all
+      events:
+        retain:
+          default: 14 # Guarda los clips donde sale un gato durante 14 días
+          mode: active_objects
+
+    # 🗺️ Definición de la Zona del arenero
+    zones:
+      zona_arenero:
+        coordinates: 0.1,0.1,0.9,0.1,0.9,0.9,0.1,0.9 # Coordenadas de ejemplo (luego las ajustaremos con su interfaz visual)
