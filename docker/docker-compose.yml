@@ -46,4 +46,4 @@ services:
 # 🌐 Definimos las redes al final del archivo
 networks:
   red-home-lab:
-    external: true 96bf1cbec1f43c0cccfb2ad569435dd2323c7394341ab650824957d9d16c60c0
+    external: true
