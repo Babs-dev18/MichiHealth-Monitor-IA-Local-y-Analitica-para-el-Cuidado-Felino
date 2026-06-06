@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  frigate:
+    container_name: frigate
+    image: ghcr.io/blakeblackshear/frigate:stable
+    privileged: true
+    restart: unless-stopped
+    shm_size: "128mb"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./frigate/config.yml:/config/config.yml
+      - ./frigate/db:/media/frigate/
+    ports:
+      - "5000:5000"
+      - "8554:8554"
+    environment:
+      - TZ=${TZ}
+    networks:
+      - red-home-lab # 👈 Le decimos a Frigate que use la red común
+
+  compreface:
+    container_name: compreface
+    image: exadel/compreface:1.2.0
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=${TZ}
+    networks:
+      - red-home-lab # 👈 Enganchamos CompreFace a la red común
+
+  double-take:
+    container_name: double-take
+    image: jakowenko/double-take:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./double-take:/storage
+    environment:
+      - TZ=${TZ}
+    networks:
+      - red-home-lab # 👈 Enganchamos Double Take a la red común
+
+# 🌐 Definimos las redes al final del archivo
+networks:
+  red-home-lab:
+    external: true 96bf1cbec1f43c0cccfb2ad569435dd2323c7394341ab650824957d9d16c60c0
