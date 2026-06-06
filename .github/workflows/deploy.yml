@@ -16,6 +16,14 @@ jobs:
       - name: ⬇️ Clonar el repositorio
         uses: actions/checkout@v4
 
+      # 🔐 NUEVO PASO: Conectar el bot de GitHub a tu red de Tailscale temporalmente
+      - name: 🐙 Conectar a Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
       # 2️⃣ Sincroniza carpetas de configuración (docker, frigate, etc.) hacia el servidor por SSH
       - name: 🚚 Transferir archivos al servidor (rsync)
         uses: easingthemes/ssh-deploy@main
