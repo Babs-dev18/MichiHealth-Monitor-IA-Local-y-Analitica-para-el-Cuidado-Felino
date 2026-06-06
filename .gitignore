@@ -1,7 +1,13 @@
-__pycache__/        # Carpetas con código compilado
-*.py[cod]           # Archivos .pyc, .pyo, .pyd
-*$py.class          # Java/Jython
-.env                # Variables de entorno
-.vscode/            # Configuración local de tu editor
-.DS_Store           # Basura de Mac
-Thumbs.db           # Basura de Windows
+# Variables de entorno (Contiene contraseñas y tokens locales)
+.env
+*.env
+
+# Archivos temporales y del sistema operativo
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Datos persistentes de los contenedores (No queremos subir gigas de base de datos a GitHub)
+docker/frigate/db/
+docker/compreface/data/
+docker/home-assistant/config/

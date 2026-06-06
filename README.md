@@ -1,3 +1,5 @@
+# EN CONSTRUCCIÓN
+
 # 🐈 MichiHealth Monitor: IA Local y Analítica para el Cuidado Felino
 
 ¡Bienvenido! Este proyecto de Home-Lab nace de la necesidad de monitorizar la salud urinaria de mis dos gatos siameses mediante el análisis de su frecuencia de uso del arenero. Utiliza hardware reciclado, cámaras analógicas, procesamiento en los bordes (Edge Computing) e Inteligencia Artificial local para identificar a cada mascota sin depender de la nube.
