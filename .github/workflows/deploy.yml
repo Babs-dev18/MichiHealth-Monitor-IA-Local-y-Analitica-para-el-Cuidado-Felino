@@ -1,0 +1,41 @@
+name: 🚀 Despliegue Continuo en Nodo-Mariposa
+
+# 🚦 El bot se despertará cada vez que se haga un "push" en la rama dev
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    name: 📦 Transferir y Actualizar Domótica
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ El bot "descarga" temporalmente tu código en los servidores de GitHub
+      - name: ⬇️ Clonar el repositorio
+        uses: actions/checkout@v4
+
+      # 2️⃣ Sincroniza carpetas de configuración (docker, frigate, etc.) hacia el servidor por SSH
+      - name: 🚚 Transferir archivos al servidor (rsync)
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlptgoD --delete" # Mantiene los archivos idénticos y borra lo antiguo en el destino
+          SOURCE: "docker/" # La carpeta local que queremos mandar
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
+          TARGET: "/home/babs-dev18/infraestructura/domotica/"
+
+      # 3️⃣ Se conecta al servidor y le dice a Docker que refresque los contenedores con el nuevo código
+      - name: 🔄 Reiniciar servicios en Docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd /home/babs-dev18/infraestructura/domotica/
+            docker compose up -d --build
