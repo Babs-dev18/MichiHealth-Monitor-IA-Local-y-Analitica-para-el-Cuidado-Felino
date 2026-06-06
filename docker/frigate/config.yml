@@ -1,5 +1,8 @@
+# Frigate config.yml
+
 mqtt:
-  enabled: false # De momento lo dejamos apagado para que no falle al arrancar si no tienes un broker MQTT
+  host: mosquitto # El nombre del contenedor en la red común
+  port: 1883
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
