@@ -1,0 +1,7 @@
+__pycache__/        # Carpetas con código compilado
+*.py[cod]           # Archivos .pyc, .pyo, .pyd
+*$py.class          # Java/Jython
+.env                # Variables de entorno
+.vscode/            # Configuración local de tu editor
+.DS_Store           # Basura de Mac
+Thumbs.db           # Basura de Windows
