@@ -9,7 +9,7 @@ go2rtc:
   streams:
     loocam_analoga:
       streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x480#video=h264
+  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x480
       
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
@@ -34,6 +34,7 @@ cameras:
             - record # Este flujo se usa para guardar los clips de vídeo
 
       # SIN ACELERACIÓN: No se toca la gráfica para no perjudicar a Jellyfin
+      input_args: -fflags +genpts+ignidx -queue_size 1024
       hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
