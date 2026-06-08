@@ -9,7 +9,8 @@ go2rtc:
   streams:
     loocam_analoga:
       streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x480
+  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#width=1280#height=720#raw=-vf "yadif=mode=send_frame:parity=auto:deint=interlaced,transpose=1"
+  
       
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
@@ -38,8 +39,8 @@ cameras:
       hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
-      width: 720
-      height: 480 #Según manual capturadora
+      width: 1280
+      height: 720 #Según manual capturadora
       fps: 5
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
