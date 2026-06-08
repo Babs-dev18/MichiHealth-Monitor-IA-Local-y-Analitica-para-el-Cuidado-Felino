@@ -3,6 +3,12 @@
 mqtt:
   host: mosquitto # El nombre del contenedor en la red común
   port: 1883
+  enabled: true # Imprescindible para hablar con Double Take y Home Assistant
+
+go2rtc:
+  streams:
+    loocam_analoga:
+      - ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
@@ -41,6 +47,13 @@ cameras:
         retain:
           default: 14 # Guarda los clips donde sale un gato durante 14 días
           mode: active_objects
+    # 📸 Necesitamos capturar fotos cuando aparezca el gato para mandárselas a la IA facial      
+    snapshots:
+      enabled: true
+      draw_bounding_box: false
+      bounding_box: false
+      retain:
+        default: 7 # Guarda las fotos de los eventos 7 días
 
     # 🗺️ Definición de la Zona del arenero
     zones:

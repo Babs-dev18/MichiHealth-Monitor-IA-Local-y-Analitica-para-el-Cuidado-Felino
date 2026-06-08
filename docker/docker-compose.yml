@@ -17,6 +17,9 @@ services:
     privileged: true
     restart: unless-stopped
     shm_size: "128mb"
+    devices:
+      - /dev/video0:/dev/video0 # Mapea capturadora
+      - /dev/dri/renderD128:/dev/dri/renderD128 # Aceleración por hardware de Intel/AMD
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /home/babs-dev18/infraestructura/domotica/config_frigate:/config
@@ -24,12 +27,14 @@ services:
       - /mnt/datos/CCTV_cams/frigate_media:/media/frigate
     ports:
       - "5000:5000" # Web de Frigate
-      - "1984:1984" # 🚀 Web del go2rtc que va INCLUIDO dentro de Frigate
-      - "8554:8554" # RTSP de go2rtc inclido en Frigate
+      - "1984:1984" # 🚀 Web del go2rtc INCLUIDO dentro de Frigate
+      - "8554:8554" # RTSP de go2rtc incluido en Frigate
+      - "8555:8555/tcp" # WebRTC
+      - "8555:8555/udp" # WebRTC
     environment:
       - TZ=${TZ}
     networks:
-      - red-home-lab # 👈 Le decimos a Frigate que use la red común
+      - red-home-lab # Le decimos a Frigate que use la red común
 
   compreface:
     container_name: compreface
@@ -40,7 +45,7 @@ services:
     environment:
       - TZ=${TZ}
     networks:
-      - red-home-lab # 👈 Enganchamos CompreFace a la red común
+      - red-home-lab # Enganchamos CompreFace a la red común
 
   double-take:
     container_name: double-take
@@ -53,8 +58,8 @@ services:
     environment:
       - TZ=${TZ}
     networks:
-      - red-home-lab # 👈 Enganchamos Double Take a la red común
-      
+      - red-home-lab #  Enganchamos Double Take a la red común
+
 
 # 🌐 Definimos las redes al final del archivo
 networks:
