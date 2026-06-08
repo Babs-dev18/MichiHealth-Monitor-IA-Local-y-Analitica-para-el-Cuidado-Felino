@@ -35,7 +35,8 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           REMOTE_PORT: ${{ secrets.SERVER_PORT }}
           TARGET: "/home/babs-dev18/infraestructura/domotica/"
-          EXCLUDE: "**/mosquitto_data/, **/config_ha/, **/frigate_data/, **/config_frigate/, **/frigate_media/, **/agentdvr_data/, **/agentdvr_media/, **/image/, **/.cache/, **/*.db, **/*.db-*" # Ignora datos pesados y bloqueados
+          # 🛡️ EXCLUDE ACTUALIZADO: Añadido mosquitto_config para evitar que rsync choque con root
+          EXCLUDE: "**/mosquitto_config/, **/mosquitto_data/, **/config_ha/, **/frigate_data/, **/config_frigate/, **/frigate_media/, **/agentdvr_data/, **/agentdvr_media/, **/image/, **/.cache/, **/*.db, **/*.db-*" # Ignora datos pesados y bloqueados
 
       # 3️⃣ Se conecta al servidor y le dice a Docker que refresque los contenedores con el nuevo código
       - name: 🔄 Reiniciar servicios en Docker
