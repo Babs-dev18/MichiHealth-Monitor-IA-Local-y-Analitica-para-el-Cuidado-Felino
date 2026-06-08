@@ -8,7 +8,7 @@ mqtt:
 go2rtc:
   streams:
     loocam_analoga:
-      - ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264
+      - ffmpeg:device?video=/dev/video0&input_format=mjpeg#video=h264
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
@@ -33,20 +33,38 @@ cameras:
 
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
-      width: 1280
-      height: 720
+      width: 720
+      height: 557
       fps: 5
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
-    record:
+    # Frigate v0.13
+      record:
       enabled: true
-      retain:
-        days: 3 # Guarda las grabaciones normales durante 3 días
-        mode: all
-      events:
+      alerts:
         retain:
-          default: 14 # Guarda los clips donde sale un gato durante 14 días
-          mode: active_objects
+          days: 14
+      detections:
+        retain:
+          days: 14
+      continuous:
+        days: 3
+      motion:
+        days: 0
+
+   # Frigate v0.14+     
+   #  record:
+   #   enabled: true
+   #   retain:
+   #     days: 3 # Guarda las grabaciones normales durante 3 días
+   #     mode: all
+   #   events:
+   #     retain:
+   #       default: 14 # Guarda los clips donde sale un gato durante 14 días
+   #       mode: active_objects
+   #
+   
+        
     # 📸 Necesitamos capturar fotos cuando aparezca el gato para mandárselas a la IA facial      
     snapshots:
       enabled: true
