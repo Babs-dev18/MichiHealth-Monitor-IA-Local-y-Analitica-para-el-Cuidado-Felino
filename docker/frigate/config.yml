@@ -7,7 +7,7 @@ mqtt:
 
 go2rtc:
   streams:
-    loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#width=1280#height=720#audio=none#raw=-vf "yadif=mode=send_frame:parity=auto:deint=interlaced,transpose=1,scale=1280:720"
+    loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#audio=none
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
@@ -25,18 +25,18 @@ cameras:
   loocam_analoga: # El nombre que le damos a la cámara analógica
     ffmpeg:
       inputs:
-        - path: http://127.0.0.1:1984/api/stream.flv?src=loocam_analoga
+        - path: rtsp://127.0.0.1:8554/loocam_analoga
           roles:
             - detect # Este flujo se usa para que la IA analice el movimiento
             - record # Este flujo se usa para guardar los clips de vídeo
 
       # SIN ACELERACIÓN: No se toca la gráfica para no perjudicar a Jellyfin
-      input_args: -avoid_negative_ts make_zero -fflags +genpts+ignidx -an
+      input_args: -avoid_negative_ts make_zero -an
       hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
-      width: 1280
-      height: 720 #Según manual capturadora
+      width: 720
+      height: 576 #Según manual capturadora
       fps: 5
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
@@ -50,7 +50,7 @@ cameras:
         retain:
           days: 14
       continuous:
-        days: 3
+        days: 0
       motion:
         days: 0
 
