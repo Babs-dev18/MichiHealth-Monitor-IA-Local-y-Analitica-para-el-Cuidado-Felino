@@ -9,7 +9,7 @@ go2rtc:
   streams:
     loocam_analoga:
       streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x480#video=h264#raw=-r 5
+  loocam_analoga: ffmpeg:device?video=/dev/video0&async=v4l2&input_format=mjpeg&framerate=5&video_size=720x480#video=h264
       
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
