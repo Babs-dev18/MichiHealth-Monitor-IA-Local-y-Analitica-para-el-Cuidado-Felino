@@ -16,3 +16,10 @@ docker/home-assistant/config/
 docker/mosquitto_data/
 docker/config_ha/
 *.db
+
+# Ignorar la base de datos de Home Assistant y logs
+**/home-assistant_v2.db
+**/home-assistant_v2.db-shm
+**/home-assistant_v2.db-wal
+**/*.log
+**/.ha_run.lock
