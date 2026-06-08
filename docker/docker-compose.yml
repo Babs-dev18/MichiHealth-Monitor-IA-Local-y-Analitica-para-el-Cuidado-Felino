@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /home/babs-dev18/infraestructura/domotica/config_ha:/config
+      - /etc/localtime:/etc/localtime:ro
+#    ports:
+#      - "8123"
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+
   frigate:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:stable
@@ -9,11 +21,13 @@ services:
     shm_size: "128mb"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./frigate/config.yml:/config/config.yml
-      - ./frigate/db:/media/frigate/
+      - /home/babs-dev18/infraestructura/domotica/config_frigate:/config
+      # CLIPS Y SNAPSHOTS
+      - /mnt/datos/CCTV_cams/frigate_media:/media/frigate
     ports:
-      - "5000:5000"
-      - "8554:8554"
+      - "5000:5000" # Web de Frigate
+      - "1984:1984" # 🚀 Web del go2rtc que va INCLUIDO dentro de Frigate
+      - "8554:8554" # RTSP de go2rtc inclido en Frigate
     environment:
       - TZ=${TZ}
     networks:
@@ -42,6 +56,22 @@ services:
       - TZ=${TZ}
     networks:
       - red-home-lab # 👈 Enganchamos Double Take a la red común
+
+  agentdvr:
+    container_name: agentdvr
+    image: mekayelanik/agentdvr:latest
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+      - "3478:3478/udp"
+      - "50000-50010:50000-50010/udp"
+    volumes:
+      # 🚀 NVMe: La configuración de la app (XMLs) se queda en el disco rápido
+      - /home/babs-dev18/infraestructura/domotica/agentdvr_data:/agent/Media/XML/
+      # 💾 SEAGATE 8TB: Las grabaciones pesadas históricas van al disco de 8TB
+      - /mnt/datos/CCTV_cams/agentdvr_media:/agent/Media/WebServerRoot/Media/
+    networks:
+      - red-home-lab
 
 # 🌐 Definimos las redes al final del archivo
 networks:
