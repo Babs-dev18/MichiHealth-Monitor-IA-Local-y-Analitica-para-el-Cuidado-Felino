@@ -9,7 +9,7 @@ go2rtc:
   streams:
     loocam_analoga:
       streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x480#video=h264
+  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x480#video=h264#raw=-r 5
       
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
@@ -39,7 +39,7 @@ cameras:
     detect:
       width: 720
       height: 480 #Según manual capturadora
-      fps: 2
+      fps: 5
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
     # Frigate v0.13
