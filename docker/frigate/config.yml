@@ -9,7 +9,7 @@ go2rtc:
   streams:
     loocam_analoga:
       streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#width=1280#height=720#raw=-vf "yadif=mode=send_frame:parity=auto:deint=interlaced,transpose=1"
+  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#width=1280#height=720#raw=-vf "yadif=mode=send_frame:parity=auto:deint=interlaced,transpose=1""
       
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
@@ -33,6 +33,7 @@ cameras:
             - detect # Este flujo se usa para que la IA analice el movimiento
             - record # Este flujo se usa para guardar los clips de vídeo
 
+      hwaccel_args: preset-intel-vaapi
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
       width: 1280
