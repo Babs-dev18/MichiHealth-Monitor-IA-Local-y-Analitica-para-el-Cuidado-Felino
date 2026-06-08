@@ -9,7 +9,7 @@ go2rtc:
   streams:
     loocam_analoga:
       streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&async=v4l2&input_format=mjpeg&framerate=5&video_size=720x480#video=h264
+  loocam_analoga: ffmpeg:device?video=/dev/video0#video=h264
       
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
@@ -25,7 +25,7 @@ objects:
 
 # 📹 Configuración de las cámaras
 cameras:
-  loocam_analoga: # El nombre que le damos a tu cámara analógica
+  loocam_analoga: # El nombre que le damos a la cámara analógica
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/loocam_analoga
