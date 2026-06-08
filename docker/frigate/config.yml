@@ -28,21 +28,19 @@ cameras:
   loocam_analoga: # El nombre que le damos a tu cámara analógica
     ffmpeg:
       inputs:
-        - path: rtsp://192.168.1.128:8554/loocam_analoga
+        - path: /dev/video0
+          input_args: -f v4l2 -input_format mjpeg -video_size 720x480
           roles:
             - detect # Este flujo se usa para que la IA analice el movimiento
             - record # Este flujo se usa para guardar los clips de vídeo
 
-      # QSV gestiona los buffers de memoria de forma mucho más eficiente en la serie 8000.
-      hwaccel_args: preset-intel-qsv
-      output_args:
-        # Forzamos un formato de píxel ligero para que la IA procese el movimiento sin esfuerzo
-        detect: -f rawvideo -pix_fmt nv12
+      # SIN ACELERACIÓN: No se toca la gráfica para no perjudicar a Jellyfin
+      hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
       width: 720
       height: 480 #Según manual capturadora
-      fps: 5
+      fps: 2
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
     # Frigate v0.13
