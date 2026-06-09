@@ -86,9 +86,8 @@ services:
     ports:
       - "1883:1883"
     volumes:
-      - /home/babs-dev18/infraestructura/domotica/mosquitto/config:/mosquitto/config
-      - /home/babs-dev18/infraestructura/domotica/mosquitto/data:/mosquitto/data
-      - /home/babs-dev18/infraestructura/domotica/mosquitto/log:/mosquitto/log
+      - ./config_mosquitto:/mosquitto/config
+      - ./mosquitto_data:/mosquitto/data
     networks:
       - red-home-lab
 
