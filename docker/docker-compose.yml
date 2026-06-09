@@ -11,12 +11,29 @@ services:
     privileged: true
     network_mode: host
 
+  # go2rtc.yaml
+  go2rtc:
+    image: alexxit/go2rtc:latest
+    container_name: go2rtc
+    restart: unless-stopped
+    networks:
+      - red-home-lab
+    ports:
+      - "1984:1984" # API y Web UI
+      - "8554:8554" # Puerto RTSP que leerá Frigate
+    devices:
+      - /dev/video0:/dev/video0 # Solo go2rtc toca el hardware
+    volumes:
+      - ./go2rtc.yaml:/config/go2rtc.yaml # Archivo de configuración de go2rtc
+      
   frigate:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:stable
     privileged: true
     restart: unless-stopped
     shm_size: "128mb"
+    depends_on:
+      - go2rtc # Espera a que go2rtc esté levantado antes de arrancar
     devices:
       - /dev/video0:/dev/video0 # Mapea capturadora
       - /dev/dri/renderD128:/dev/dri/renderD128 # Aceleración por hardware de Intel/AMD
@@ -27,8 +44,8 @@ services:
       - /mnt/datos/CCTV_cams/frigate_media:/media/frigate
     ports:
       - "5000:5000" # Web de Frigate
-      - "1984:1984" # 🚀 Web del go2rtc INCLUIDO dentro de Frigate
-      - "8554:8554" # RTSP de go2rtc incluido en Frigate
+      # - "1984:1984" # 🚀 Web del go2rtc INCLUIDO dentro de Frigate
+      # - "8554:8554" # RTSP de go2rtc incluido en Frigate
       - "8555:8555/tcp" # WebRTC
       - "8555:8555/udp" # WebRTC
     environment:

@@ -5,15 +5,10 @@ mqtt:
   port: 1883
   enabled: true # Imprescindible para hablar con Double Take y Home Assistant
 
-go2rtc:
-  streams:
-    loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#audio=none
-
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
-  ov:
-    type: openvino
-    device: AUTO # Selecciona automáticamente la gráfica integrada de tu procesador Intel
+  cpu_detector:
+    type: CPU # Cambiado de openvino a cpu puro
 
 # 🎯 Definición de los objetos que la IA debe rastrear globalmente
 objects:
@@ -25,7 +20,7 @@ cameras:
   loocam_analoga: # El nombre que le damos a la cámara analógica
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/loocam_analoga
+        - path: rtsp://go2rtc:8554/loocam_analoga
           roles:
             - detect # Este flujo se usa para que la IA analice el movimiento
             - record # Este flujo se usa para guardar los clips de vídeo
@@ -35,9 +30,9 @@ cameras:
       hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
-      width: 720
-      height: 576 #Según manual capturadora
-      fps: 5
+      width: 1280
+      height: 720
+      fps: 2
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
     # Frigate v0.13
