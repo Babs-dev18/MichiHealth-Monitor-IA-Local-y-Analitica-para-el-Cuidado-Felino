@@ -23,6 +23,7 @@ services:
       - "8554:8554" # Puerto RTSP que leerá Frigate
     devices:
       - /dev/video0:/dev/video0 # Solo go2rtc toca el hardware
+      - /dev/video1:/dev/video1
     volumes:
       - ./config_go2rtc:/config # Archivo de configuración de go2rtc
       
