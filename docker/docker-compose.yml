@@ -22,7 +22,7 @@ services:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
     volumes:
-      - ./go2rtc.yaml:/config/go2rtc.yaml
+      - ./config_go2rtc/go2rtc.yaml:/config/go2rtc.yaml
       
   frigate:
     container_name: frigate
