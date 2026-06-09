@@ -30,9 +30,9 @@ cameras:
       hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
     detect:
-      width: 1280
-      height: 720
-      fps: 5
+      width: 640
+      height: 480
+      fps: 4
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
     # Frigate v0.13

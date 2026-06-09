@@ -1,2 +1,2 @@
 streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=720x576#video=h264#width=1280#height=720#raw=-vf "yadif=mode=send_frame:parity=auto:deint=interlaced,transpose=1"
+  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=640x480#video=h264#raw=-vf yadif
