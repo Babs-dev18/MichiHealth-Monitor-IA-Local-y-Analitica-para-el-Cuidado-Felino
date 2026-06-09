@@ -15,17 +15,14 @@ services:
   go2rtc:
     image: alexxit/go2rtc:latest
     container_name: go2rtc
+    privileged: true
+    network_mode: host
     restart: unless-stopped
-    networks:
-      - red-home-lab
-    ports:
-      - "1984:1984" # API y Web UI
-      - "8554:8554" # Puerto RTSP que leerá Frigate
     devices:
-      - /dev/video0:/dev/video0 # Solo go2rtc toca el hardware
+      - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
     volumes:
-      - ./config_go2rtc:/config # Archivo de configuración de go2rtc
+      - ./go2rtc.yaml:/config/go2rtc.yaml
       
   frigate:
     container_name: frigate
