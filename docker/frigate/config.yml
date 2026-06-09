@@ -8,7 +8,7 @@ mqtt:
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
   cpu_detector:
-    type: CPU # Cambiado de openvino a cpu puro
+    type: cpu # Cambiado de openvino a cpu puro
 
 # 🎯 Definición de los objetos que la IA debe rastrear globalmente
 objects:
@@ -32,7 +32,7 @@ cameras:
     detect:
       width: 1280
       height: 720
-      fps: 2
+      fps: 5
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
     # Frigate v0.13

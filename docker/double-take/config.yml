@@ -4,23 +4,23 @@
 server:
   ports: 3300
 
-# 🐈 Conexión nativa con el motor de vídeo (Frigate)
-frigate:
-  url: http://frigate:5000 # Al estar en la misma red de Docker, usamos el nombre del contenedor
+
 
 # 🧠 Conexión con el motor de reconocimiento (CompreFace)
-detect:
+plugins:
   compreface:
     url: http://compreface:8000
-    # Usamos la clave de API que definiremos en nuestro archivo seguro .env
-    key: ${COMPREFACE_API_KEY} 
+    key: ${COMPREFACE_API_KEY}
 
-# 🎯 Configuración del flujo de análisis
+
+# 🐈 Conexión nativa con el motor de vídeo (Frigate)
 frigate:
-  attempts: { amped: 5 } # Intentos máximos de captura por evento para no saturar la CPU
+  url: http://frigate:5000 # Nombre del contenedor en la red común
+  attempts:
+    default: 5 # Intentos de captura por evento
   cameras:
-    - loocam_analoga # Debe coincidir exactamente con el nombre que pusimos en Frigate
+    - loocam_analoga 
   zones:
-    - name: zona_arenero # Solo analiza si el gato está dentro de la zona que nos interesa
+    - name: zona_arenero 
   objects:
-    - cat 
+    - cat

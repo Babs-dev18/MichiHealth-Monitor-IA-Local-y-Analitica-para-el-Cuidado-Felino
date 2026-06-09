@@ -24,7 +24,7 @@ services:
     devices:
       - /dev/video0:/dev/video0 # Solo go2rtc toca el hardware
     volumes:
-      - ./go2rtc.yaml:/config/go2rtc.yaml # Archivo de configuración de go2rtc
+      - ./config_go2rtc:/config # Archivo de configuración de go2rtc
       
   frigate:
     container_name: frigate
@@ -34,8 +34,9 @@ services:
     shm_size: "128mb"
     depends_on:
       - go2rtc # Espera a que go2rtc esté levantado antes de arrancar
+      - mosquitto # 🦟 Asegura que Mosquitto esté vivo antes de que Frigate intente loguearse
     devices:
-      - /dev/video0:/dev/video0 # Mapea capturadora
+      # /dev/video0 ELIMINADO de aquí de forma definitiva para evitar congelar el kernel
       - /dev/dri/renderD128:/dev/dri/renderD128 # Aceleración por hardware de Intel/AMD
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -69,13 +70,27 @@ services:
     image: jakowenko/double-take:latest
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3300:3300"
     volumes:
       - ./double-take:/storage
     environment:
       - TZ=${TZ}
     networks:
       - red-home-lab #  Enganchamos Double Take a la red común
+
+  
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - /home/babs-dev18/infraestructura/domotica/mosquitto/config:/mosquitto/config
+      - /home/babs-dev18/infraestructura/domotica/mosquitto/data:/mosquitto/data
+      - /home/babs-dev18/infraestructura/domotica/mosquitto/log:/mosquitto/log
+    networks:
+      - red-home-lab
 
 
 # 🌐 Definimos las redes al final del archivo
