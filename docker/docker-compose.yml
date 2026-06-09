@@ -16,13 +16,19 @@ services:
     image: alexxit/go2rtc:latest
     container_name: go2rtc
     privileged: true
-    network_mode: host
     restart: unless-stopped
+    ports:
+      - "1984:1984"       # Interfaz Web de go2rtc
+      - "8554:8554"       # Servidor RTSP (el que usa Frigate)
+      - "8555:8555/tcp"   # Protocolo WebRTC para streaming rápido
+      - "8555:8555/udp"   # Protocolo WebRTC en UDP
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
     volumes:
       - ./config_go2rtc/go2rtc.yaml:/config/go2rtc.yaml
+    networks:
+      - red-home-lab
       
   frigate:
     container_name: frigate
