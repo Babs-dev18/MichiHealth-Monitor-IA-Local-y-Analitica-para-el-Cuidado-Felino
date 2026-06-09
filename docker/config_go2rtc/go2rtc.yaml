@@ -1,2 +1,2 @@
 streams:
-  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=640x480#video=h264#raw=-vf yadif
+  loocam_analoga: ffmpeg:device?video=/dev/video0&input_format=mjpeg&video_size=640x480
