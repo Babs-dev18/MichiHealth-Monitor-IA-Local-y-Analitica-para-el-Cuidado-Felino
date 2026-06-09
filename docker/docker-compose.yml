@@ -45,8 +45,8 @@ services:
       - "5000:5000" # Web de Frigate
       # - "1984:1984" # 🚀 Web del go2rtc INCLUIDO dentro de Frigate
       # - "8554:8554" # RTSP de go2rtc incluido en Frigate
-      - "8555:8555/tcp" # WebRTC
-      - "8555:8555/udp" # WebRTC
+      # - "8555:8555/tcp" # WebRTC
+      # - "8555:8555/udp" # WebRTC
     environment:
       - TZ=${TZ}
     networks:
