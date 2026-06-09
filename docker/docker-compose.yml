@@ -41,8 +41,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /home/babs-dev18/infraestructura/domotica/config_frigate:/config
-      # CLIPS Y SNAPSHOTS
-      - /mnt/datos/CCTV_cams/frigate_media:/media/frigate
+      # CLIPS Y SNAPSHOTS Cambio al nmve para probar
+      - ./frigate_media:/media/frigate
     ports:
       - "5000:5000" # Web de Frigate
       # - "1984:1984" # 🚀 Web del go2rtc INCLUIDO dentro de Frigate
