@@ -5,7 +5,7 @@ mqtt:
   port: 1883
   enabled: true # Imprescindible para hablar con Double Take y Home Assistant
 
-# 🧠 Aceleración por Hardware usando Intel OpenVINO
+# Aceleración por Hardware usando Intel OpenVINO
 detectors:
   ov:
     type: openvino
@@ -14,14 +14,14 @@ detectors:
 go2rtc:
   streams:
     tapo_michi18:
-      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@IP_DE_TU_CAMARA_TAPO:554/stream1
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream1
 
-# 🎯 Definición de los objetos que la IA debe rastrear globalmente
+# Definición de los objetos que la IA debe rastrear globalmente
 objects:
   track:
     - cat # Le decimos a la IA que solo busque gatos
 
-# 📹 Configuración de las cámaras
+# Configuración de las cámaras
 cameras:
   tapo_michi18: # El nombre que le damos a la cámara analógica
     detect:
@@ -38,10 +38,14 @@ cameras:
       # SIN ACELERACIÓN: No se toca la gráfica para no perjudicar a Jellyfin
       input_args: -avoid_negative_ts make_zero -an
       hwaccel_args: []
-    # 📉 Ajuste de resolución y FPS para optimizar tu CPU
+    onvif:
+      host: "{FRIGATE_CAM_IP}"
+      port: 2020
+      user: "{FRIGATE_RTSP_USER}"
+      password: "{FRIGATE_RTSP_PASSWORD}"
 
 
-    # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
+    # Configuración de grabaciones (para cuando la IA detecte al gato)
 
 # Frigate v0.14+     
   record:
@@ -55,8 +59,7 @@ cameras:
         mode: active_objects
 
 
-        
-    # 📸 Necesitamos capturar fotos cuando aparezca el gato para mandárselas a la IA facial      
+
     snapshots:
       enabled: true
       draw_bounding_box: false
@@ -64,7 +67,7 @@ cameras:
       retain:
         default: 7 # Guarda las fotos de los eventos 7 días
 
-    # 🗺️ Definición de la Zona del arenero
+    # Definición de la Zona del arenero
     zones:
       zona_arenero:
         coordinates: 0.1,0.1,0.9,0.1,0.9,0.9,0.1,0.9 # Coordenadas de ejemplo (luego las ajustaremos con su interfaz visual)
