@@ -35,8 +35,8 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           REMOTE_PORT: ${{ secrets.SERVER_PORT }}
           TARGET: "/home/babs-dev18/infraestructura/domotica/"
-          # 🛡️ EXCLUSIÓN TOTAL DE CARPETAS DE CONFIGURACIÓN DINÁMICA
-          EXCLUDE: ".env,frigate/,config_frigate/.*,config_frigate/model_cache/,config_go2rtc/,config_mosquitto/,mosquitto_data/,config_ha/,frigate_data/,frigate_media/,agentdvr_data/,agentdvr_media/,image/,.cache/,*.db,*.db-*"
+          # 🛡️ Añadidos go2rtc_homekit.yml y backup_config.yaml para que rsync no intente borrarlos
+          EXCLUDE: ".env,frigate/,config_frigate/.*,config_frigate/model_cache/,config_frigate/go2rtc_homekit.yml,config_frigate/backup_config.yaml,config_go2rtc/,config_mosquitto/,mosquitto_data/,config_ha/,frigate_data/,frigate_media/,agentdvr_data/,agentdvr_media/,image/,.cache/,*.db,*.db-*"
 
       # 3️⃣ Se conecta al servidor y le dice a Docker que refresque los contenedores con el nuevo código
       - name: 🔄 Reiniciar servicios en Docker
