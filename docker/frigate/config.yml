@@ -7,8 +7,14 @@ mqtt:
 
 # 🧠 Aceleración por Hardware usando Intel OpenVINO
 detectors:
-  cpu_detector:
-    type: cpu # Cambiado de openvino a cpu puro
+  ov:
+    type: openvino
+    device: CPU
+
+go2rtc:
+  streams:
+    tapo_michi18:
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@IP_DE_TU_CAMARA_TAPO:554/stream1
 
 # 🎯 Definición de los objetos que la IA debe rastrear globalmente
 objects:
@@ -17,10 +23,14 @@ objects:
 
 # 📹 Configuración de las cámaras
 cameras:
-  loocam_analoga: # El nombre que le damos a la cámara analógica
+  tapo_michi18: # El nombre que le damos a la cámara analógica
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
     ffmpeg:
       inputs:
-        - path: rtsp://go2rtc:8554/loocam_analoga
+        - path: rtsp://127.0.0.1:8554/tapo_michi18
           roles:
             - detect # Este flujo se usa para que la IA analice el movimiento
             - record # Este flujo se usa para guardar los clips de vídeo
@@ -29,37 +39,21 @@ cameras:
       input_args: -avoid_negative_ts make_zero -an
       hwaccel_args: []
     # 📉 Ajuste de resolución y FPS para optimizar tu CPU
-    detect:
-      width: 640
-      height: 480
-      fps: 4
+
 
     # 💾 Configuración de grabaciones (para cuando la IA detecte al gato)
-    # Frigate v0.13
-    record:
-      enabled: true
-      alerts:
-        retain:
-          days: 14
-      detections:
-        retain:
-          days: 14
-      continuous:
-        days: 0
-      motion:
-        days: 0
 
 # Frigate v0.14+     
-#  record:
-#   enabled: true
-#   retain:
-#     days: 3 # Guarda las grabaciones normales durante 3 días
-#     mode: all
-#   events:
-#     retain:
-#       default: 14 # Guarda los clips donde sale un gato durante 14 días
-#       mode: active_objects
-#
+  record:
+    enabled: true
+    retain: 
+      days: 3 # Guarda las grabaciones normales durante 3 días
+      mode: all
+    events:
+      retain:
+        default: 14 # Guarda los clips donde sale un gato durante 14 días
+        mode: active_objects
+
 
         
     # 📸 Necesitamos capturar fotos cuando aparezca el gato para mandárselas a la IA facial      
