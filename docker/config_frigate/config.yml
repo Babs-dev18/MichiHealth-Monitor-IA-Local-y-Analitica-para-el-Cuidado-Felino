@@ -32,8 +32,8 @@ cameras:
             - audio
   
     detect:
-      width: 1280
-      height: 720
+      width: 640
+      height: 360
       fps: 5
 
     audio:
