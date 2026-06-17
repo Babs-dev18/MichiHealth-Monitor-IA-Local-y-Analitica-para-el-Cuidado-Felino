@@ -36,8 +36,8 @@ jobs:
           REMOTE_PORT: ${{ secrets.SERVER_PORT }}
           TARGET: "/home/babs-dev18/infraestructura/domotica/"
           # 🛡️ EXCLUDE CORREGIDO: Sin espacios intermedios y con exclusión directa del config.yml local
-          EXCLUDE: ".env,config_frigate/config.yml,config_go2rtc/,config_mosquitto/,mosquitto_data/,config_ha/,frigate_data/,config_frigate/downloads/,frigate_media/,agentdvr_data/,agentdvr_media/,image/,.cache/,*.db,*.db-*"
-          
+          EXCLUDE: ".env,frigate/,config_frigate/config.yml,config_go2rtc/,config_mosquitto/,mosquitto_data/,config_ha/,frigate_data/,frigate_media/,agentdvr_data/,agentdvr_media/,image/,.cache/,*.db,*.db-*"
+
       # 3️⃣ Se conecta al servidor y le dice a Docker que refresque los contenedores con el nuevo código
       - name: 🔄 Reiniciar servicios en Docker
         uses: appleboy/ssh-action@master
