@@ -40,12 +40,12 @@ cameras:
     audio:
       enabled: true
 
-    onvif:
-      host: "{FRIGATE_CAM_IP}"
-      port: 2020
-      user: "{FRIGATE_RTSP_USER}"
-      password: "{FRIGATE_RTSP_PASSWORD}"
-
+#    onvif:
+#      host: "{FRIGATE_CAM_IP}"
+#      port: 2020
+#      user: "{FRIGATE_RTSP_USER}"
+#      password: "{FRIGATE_RTSP_PASSWORD}"
+#
     record:
       enabled: true
       continuous:
