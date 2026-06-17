@@ -1,13 +1,10 @@
-# docker-compose.yml
 services:
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
-      - /home/babs-dev18/infraestructura/domotica/config_ha:/config
+      - ./config_ha:/config
       - /etc/localtime:/etc/localtime:ro
-#    ports:
-#      - "8123"
     restart: unless-stopped
     privileged: true
     network_mode: host
@@ -19,27 +16,26 @@ services:
     restart: unless-stopped
     shm_size: "128mb"
     depends_on:
-      - mosquitto # Asegura que Mosquitto esté vivo antes de que Frigate intente loguearse
+      - mosquitto
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128 # Aceleración por hardware de Intel/AMD
+      - /dev/dri/renderD128:/dev/dri/renderD128
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /home/babs-dev18/infraestructura/domotica/config_frigate:/config
-      # CLIPS Y SNAPSHOTS Cambio al nmve para probar
+      - ./config_frigate:/config
       - ./frigate_media:/media/frigate
     ports:
-      - "5000:5000" # Web de Frigate
-      - "1984:1984" # 🚀 Web del go2rtc INCLUIDO dentro de Frigate
-      - "8554:8554" # RTSP de go2rtc incluido en Frigate
-      - "8555:8555/tcp" # WebRTC
-      - "8555:8555/udp" # WebRTC
+      - "5000:5000"
+      - "1984:1984" # Interfaz de go2rtc
+      - "8554:8554" # RTSP Restream
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
     environment:
       - TZ=Europe/Madrid
       - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER}
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
       - FRIGATE_CAM_IP=${FRIGATE_CAM_IP}
     networks:
-      - red-home-lab # Le decimos a Frigate que use la red común
+      - red-home-lab
   
   mosquitto:
     image: eclipse-mosquitto:2
@@ -53,8 +49,6 @@ services:
     networks:
       - red-home-lab
 
-
-# 🌐 Definimos las redes al final del archivo
 networks:
   red-home-lab:
     external: true
