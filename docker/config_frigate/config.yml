@@ -11,9 +11,9 @@ detectors:
 go2rtc:
   streams:
     tapo_michi18:
-      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream1#transport=tcp
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream1
     tapo_michi18_low:
-      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream2#transport=tcp
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream2
 
 objects:
   track:
