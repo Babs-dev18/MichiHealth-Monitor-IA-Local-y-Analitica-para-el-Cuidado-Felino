@@ -18,13 +18,19 @@ services:
     depends_on:
       - mosquitto
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/renderD128:/dev/dri/renderD128 # Tu aceleración gráfica Intel/AMD
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./config_frigate:/config
+      - ./config_frigate:/config 
       - ./frigate_media:/media/frigate
+      # Escudo protector para SSD usando 1GB de RAM para la caché
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
     ports:
-      - "5000:5000"
+      - "8971:8971" # Interfaz Web Segura (Pide login)
+      - "5000:5000" # Interfaz Web Clásica
       - "1984:1984" # Interfaz de go2rtc
       - "8554:8554" # RTSP Restream
       - "8555:8555/tcp"

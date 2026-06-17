@@ -30,6 +30,7 @@ cameras:
         - path: rtsp://127.0.0.1:8554/tapo_michi18_high
           roles:
             - record
+            - audio
   
     detect:
       width: 1280
