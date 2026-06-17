@@ -11,7 +11,7 @@ services:
 
   frigate:
     container_name: frigate
-    image: ghcr.io/blakeblackshear/frigate:stable
+    image: ghcr.io/blakeblackshear/frigate:0.17.0
     privileged: true
     restart: unless-stopped
     shm_size: "128mb"

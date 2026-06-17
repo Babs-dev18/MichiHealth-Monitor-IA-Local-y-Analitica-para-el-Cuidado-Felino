@@ -10,10 +10,10 @@ detectors:
 
 go2rtc:
   streams:
-    tapo_michi18_high:
-      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream1
+    tapo_michi18:
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream1#transport=tcp
     tapo_michi18_low:
-      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream2
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@{FRIGATE_CAM_IP}:554/stream2#transport=tcp
 
 objects:
   track:
@@ -27,7 +27,7 @@ cameras:
         - path: rtsp://127.0.0.1:8554/tapo_michi18_low
           roles:
             - detect
-        - path: rtsp://127.0.0.1:8554/tapo_michi18_high
+        - path: rtsp://127.0.0.1:8554/tapo_michi18
           roles:
             - record
             - audio
@@ -48,13 +48,16 @@ cameras:
 
     record:
       enabled: true
-      retain:
-        days: 3
-        mode: all
-      events:
+      continuous:
+        days: 3 # Graba 24/7 de forma continua durante 3 días
+      alerts:
         retain:
-          default: 14
-          mode: active_objects
+          days: 14 # Guarda eventos importantes (gatos en el arenero) durante 14 días
+      detections:
+        retain:
+          days: 14 # Guarda detecciones normales durante 14 días
+      motion:
+        days: 0
 
     snapshots:
       enabled: true
@@ -64,3 +67,5 @@ cameras:
     zones:
       zona_arenero:
         coordinates: 0.1,0.1,0.9,0.1,0.9,0.9,0.1,0.9
+
+version: 0.17-0
