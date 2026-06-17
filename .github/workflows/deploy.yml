@@ -36,7 +36,7 @@ jobs:
           REMOTE_PORT: ${{ secrets.SERVER_PORT }}
           TARGET: "/home/babs-dev18/infraestructura/domotica/"
           # 🛡️ EXCLUDE ACTUALIZADO: Añadido mosquitto_config para evitar que rsync choque con root
-          EXCLUDE: "**/config_go2rtc/, **/double-take/, **/config_mosquitto/, **/mosquitto_data/, **/config_ha/, **/frigate_data/, **/config_frigate/, **/frigate_media/, **/agentdvr_data/, **/agentdvr_media/, **/image/, **/.cache/, **/*.db, **/*.db-*"
+          EXCLUDE: "**/config_go2rtc/, **/config_mosquitto/, **/mosquitto_data/, **/config_ha/, **/frigate_data/, **/config_frigate/, **/frigate_media/, **/agentdvr_data/, **/agentdvr_media/, **/image/, **/.cache/, **/*.db, **/*.db-*"
       # 3️⃣ Se conecta al servidor y le dice a Docker que refresque los contenedores con el nuevo código
       - name: 🔄 Reiniciar servicios en Docker
         uses: appleboy/ssh-action@master

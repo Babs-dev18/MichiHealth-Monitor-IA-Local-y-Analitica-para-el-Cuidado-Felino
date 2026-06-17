@@ -12,7 +12,6 @@ services:
     privileged: true
     network_mode: host
 
-
   frigate:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:stable
@@ -36,6 +35,8 @@ services:
       - "8555:8555/udp" # WebRTC
     environment:
       - TZ=Europe/Madrid
+      - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER}
+      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
     networks:
       - red-home-lab # Le decimos a Frigate que use la red común
   
