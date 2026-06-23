@@ -1,33 +1,35 @@
-# 📄 Contenido para home-assistant/michi-automations.yaml
-
-# 1️⃣ Automatización: Registrar la visita en base a lo que ve la IA
+# 1️⃣ Automatización: Registrar la visita clasificando por tamaño en píxeles (Box Area)
 - alias: "Michi Health: Registrar Visita Arenero"
   id: michi_health_registrar_visita
   trigger:
     - platform: mqtt
-      topic: double-take/matches/tapo_michi18  # <-- ¡CORREGIDO AQUÍ!
+      topic: frigate/events
   condition:
+    # CORRECCIÓN: Cambiado 'current_zones' por 'entered_zones' para asegurar el positivo al finalizar el evento
     - condition: template
-      value_template: "{{ trigger.payload_json.box.zone == 'zona_arenero' }}"
+      value_template: >
+        {{ trigger.payload_json['type'] == 'end' and 
+           trigger.payload_json['after']['label'] == 'cat' and 
+           'zona_arenero' in trigger.payload_json['after']['entered_zones'] }}
   action:
     - choose:
-        # 🐈 Caso Dobby (Siamés Gris)
+        # 🐈 Caso Patrón (Blanco y pequeño - Menor de 58000 píxeles)
         - conditions:
             - condition: template
-              value_template: "{{ trigger.payload_json.match.name == 'Dobby' and trigger.payload_json.match.score | float > 0.80 }}"
-          sequence:
-            - action: counter.increment
-              target:
-                entity_id: counter.michi_dobby_bano_counter
-
-        # 🐈 Caso Patrón (Siamés Blanco/Negro)
-        - conditions:
-            - condition: template
-              value_template: "{{ trigger.payload_json.match.name == 'Patron' and trigger.payload_json.match.score | float > 0.80 }}"
+              value_template: "{{ trigger.payload_json['after']['area'] | int < 58000 }}"
           sequence:
             - action: counter.increment
               target:
                 entity_id: counter.michi_patron_bano_counter
+
+        # 🐈 Caso Dobby (Grisáceo y grande - Mayor o igual a 58000 píxeles)
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.payload_json['after']['area'] | int >= 58000 }}"
+          sequence:
+            - action: counter.increment
+              target:
+                entity_id: counter.michi_dobby_bano_counter
 
 # 2️⃣ Automatización: Reinicio diario a medianoche
 - alias: "Michi Health: Reinicio Diario"
@@ -76,10 +78,13 @@
                     name: "Dobby"
                   - entity: counter.michi_patron_bano_counter
                     name: "Patrón"
+                # CORRECCIÓN: Convertido el paso condicional en un bloque if-then para que el bucle no se detenga si un gato sí ha ido al baño
                 sequence:
-                  - condition: template
-                    value_template: "{{ states(repeat.item.entity) | int == 0 }}"
-                  - action: notify.persistent_notification
-                    data:
-                      title: "⚠️ Alerta Médica: Inactividad"
-                      message: "{{ repeat.item.name }} no ha registrado visitas al arenero en todo el día. Riesgo de obstrucción."
+                  - if:
+                      - condition: template
+                        value_template: "{{ states(repeat.item.entity) | int == 0 }}"
+                    then:
+                      - action: notify.persistent_notification
+                        data:
+                          title: "⚠️ Alerta Médica: Inactividad"
+                          message: "{{ repeat.item.name }} no ha registrado visitas al arenero en todo el día. Riesgo de obstrucción."

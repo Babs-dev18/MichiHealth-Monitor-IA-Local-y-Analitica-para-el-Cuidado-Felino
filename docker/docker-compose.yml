@@ -9,16 +9,17 @@ services:
     privileged: true
     network_mode: host
 
+
   frigate:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:0.17.0
     privileged: true
     restart: unless-stopped
-    shm_size: "128mb"
+    shm_size: "256mb"
     depends_on:
       - mosquitto
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128 # Tu aceleración gráfica Intel/AMD
+      - /dev/dri/renderD128:/dev/dri/renderD128 # aceleración gráfica Intel/AMD
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./config_frigate:/config 
